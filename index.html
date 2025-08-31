@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuestLens - Real-time Spot Seeker</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Left Panel - Search Interface -->
+        <div class="left-panel">
+            <header class="app-header">
+                <h1 class="app-title">
+                    <i class="fas fa-compass"></i>
+                    QuestLens
+                </h1>
+                <p class="app-tagline">Real-time Agentic Spot Seeker</p>
+                <div class="live-indicator">
+                    <i class="fas fa-broadcast-tower"></i>
+                    <span>Powered by Live APIs</span>
+                </div>
+            </header>
+
+            <div class="search-section">
+                <form id="questForm" class="quest-form">
+                    <div class="form-group">
+                        <label for="locationInput" class="form-label">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Location (Any city worldwide)
+                        </label>
+                        <input 
+                            type="text" 
+                            id="locationInput" 
+                            class="form-control location-input" 
+                            placeholder="e.g., Tokyo, New York, Mumbai, London..."
+                            required
+                        />
+                        <div class="input-help">
+                            <i class="fas fa-globe"></i>
+                            <span>Works with any city or location globally</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="queryInput" class="form-label">
+                            <i class="fas fa-comments"></i>
+                            What are you looking for?
+                        </label>
+                        <textarea 
+                            id="queryInput" 
+                            class="form-control query-input" 
+                            rows="3"
+                            placeholder="Describe what you want... (e.g., 'Best ramen shops for lunch', 'Family museums with parking', 'Coffee shops with WiFi')"
+                            required
+                        ></textarea>
+                        <div class="input-help">
+                            <i class="fas fa-brain"></i>
+                            <span>Powered by Llama 3.1 AI for smart recommendations</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn--primary btn--full-width discover-btn">
+                        <i class="fas fa-search"></i>
+                        <span class="btn-text">Discover Real-time Places</span>
+                        <div class="btn-loader hidden">
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </div>
+                    </button>
+                </form>
+
+                <div class="sample-queries">
+                    <p class="sample-queries-title">Try these real-time examples:</p>
+                    <div class="sample-query-tags">
+                        <span class="sample-tag" data-query="Best Italian restaurants with outdoor seating">Italian Dining</span>
+                        <span class="sample-tag" data-query="Museums suitable for children and families">Family Museums</span>
+                        <span class="sample-tag" data-query="Coffee shops with WiFi for remote work">WiFi Coffee</span>
+                        <span class="sample-tag" data-query="Budget-friendly hotels near city center">Budget Hotels</span>
+                        <span class="sample-tag" data-query="Local attractions off the beaten path">Hidden Gems</span>
+                        <span class="sample-tag" data-query="Parks and outdoor spaces for jogging">Running Parks</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="resultsSection" class="results-section hidden">
+                <div class="results-header">
+                    <h3>
+                        <i class="fas fa-magic"></i> 
+                        Live AI Recommendations
+                    </h3>
+                    <div class="data-source-badge">
+                        <i class="fas fa-wifi"></i>
+                        <span>Live Data from Foursquare</span>
+                    </div>
+                </div>
+                <div id="aiResponse" class="ai-response"></div>
+                <div id="placesList" class="places-list"></div>
+            </div>
+
+            <div id="loadingSection" class="loading-section hidden">
+                <div class="loading-content">
+                    <div class="loading-spinner">
+                        <i class="fas fa-satellite-dish fa-spin"></i>
+                    </div>
+                    <p class="loading-text">Fetching real-time data...</p>
+                    <div class="loading-steps">
+                        <div class="loading-step" id="step1">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Geocoding your location globally</span>
+                        </div>
+                        <div class="loading-step" id="step2">
+                            <i class="fas fa-brain"></i>
+                            <span>Processing with Llama 3.1 AI</span>
+                        </div>
+                        <div class="loading-step" id="step3">
+                            <i class="fas fa-wifi"></i>
+                            <span>Fetching live places from Foursquare</span>
+                        </div>
+                        <div class="loading-step" id="step4">
+                            <i class="fas fa-star"></i>
+                            <span>Getting detailed place information</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right Panel - Map -->
+        <div class="right-panel">
+            <div class="map-header">
+                <h3><i class="fas fa-map"></i> Live Interactive Map</h3>
+                <div class="map-controls">
+                    <span id="placeCount" class="place-count">0 places found</span>
+                    <div class="live-data-indicator">
+                        <i class="fas fa-circle live-pulse"></i>
+                        <span>Real-time Data</span>
+                    </div>
+                </div>
+            </div>
+            <div id="map" class="map-container">
+                <div class="map-overlay" id="mapOverlay">
+                    <div class="map-placeholder">
+                        <i class="fas fa-globe-americas"></i>
+                        <h4>Global Real-time Search</h4>
+                        <p>Enter any location worldwide to see live places</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
